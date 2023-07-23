@@ -13,7 +13,7 @@ axios.interceptors.response.use(
             error.response.status < 500;
 
         if (!expectedErrors) {
-            logger.log(error);
+            console.log(error);
             toast.error("Somthing was wrong. Try it later");
         }
         return Promise.reject(error);
