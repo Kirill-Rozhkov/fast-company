@@ -4,7 +4,6 @@ import { useQuality } from "../../../hooks/useQuality";
 const Quality = ({ _id }) => {
     const { isLoading, getQuality } = useQuality(_id);
     const quality = getQuality(_id);
-    console.log(quality);
     if (!isLoading) {
         return (
             <span className={"badge m-1 bg-" + quality.color}>
