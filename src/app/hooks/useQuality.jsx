@@ -43,13 +43,17 @@ export const QualityProvider = ({ children }) => {
     }
 
     function transformQualities(qualities) {
-        return qualities.map((qual) => {
-            const quality = getQuality(qual)
-            return {
-                label: quality.name,
-                value: quality._id
-            }
-        })
+        if (qualities) {
+            return qualities.map((qual) => {
+                const quality = getQuality(qual)
+                return {
+                    label: quality.name,
+                    value: quality._id
+                }
+            })
+        } else {
+            return []
+        }
     }
 
     return (

@@ -6,26 +6,45 @@ import SelectField from "../../common/form/selectField"
 import RadioField from "../../common/form/radioField"
 import MultiSelectField from "../../common/form/multiSelectField"
 import BackHistoryButton from "../../common/backButton"
-import { useQuality } from "../../../hooks/useQuality"
 import { useProfessions } from "../../../hooks/useProfession"
 import { useAuth } from "../../../hooks/useAuth"
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min"
-import { useUser } from "../../../hooks/useUsers"
+import { useSelector } from "react-redux"
+import {
+    getQualities,
+    getQualitiesLoadingStatus
+} from "../../../store/qualities"
+import {
+    getProfessions,
+    getProfessionsLoadingStatus
+} from "../../../store/professions"
 
 const EditUserPage = () => {
     const { userId } = useParams()
     const { currentUser, isLoading: userLoading, updateUser } = useAuth()
-    const { professions } = useProfessions()
-    const {
-        qualities,
-        transformQualities,
-        isLoading: qualitiesloading
-    } = useQuality()
+    const professions = useSelector(getProfessions())
+    const professionsloading = useSelector(getProfessionsLoadingStatus())
+    const qualities = useSelector(getQualities())
+    const qualitiesloading = useSelector(getQualitiesLoadingStatus())
+
+    const transformQualities = (qualitiesIds) => {
+        if (qualities) {
+            return qualitiesIds.map((qual) => {
+                const quality = qualities.find((q) => q._id === qual)
+                return {
+                    label: quality.name,
+                    value: quality._id
+                }
+            })
+        } else {
+            return []
+        }
+    }
 
     const [data, setData] = useState({
         name: currentUser.name,
         email: currentUser.email,
-        profession: currentUser.profession,
+        profession: !professionsloading ? currentUser.profession : [],
         sex: currentUser.sex,
         qualities:
             currentUser && !userLoading && !qualitiesloading
